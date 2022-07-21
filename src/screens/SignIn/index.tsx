@@ -2,25 +2,12 @@ import Logo from '@assets/logo_primary.svg'
 import { Button } from '@components/Button'
 import { Input } from '@components/Input'
 import { yupResolver } from '@hookform/resolvers/yup'
-import {
-   FormControl,
-   Heading,
-   Icon,
-   Text,
-   useTheme,
-   VStack,
-   WarningOutlineIcon
-} from 'native-base'
+import { Heading, Icon, useTheme, VStack } from 'native-base'
 import { Envelope, Key } from 'phosphor-react-native'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-type FormData = {
-   email: string
-   password: string
-}
-
-const schema = yup
+const signInValidationSchema = yup
    .object({
       email: yup
          .string()
@@ -30,6 +17,8 @@ const schema = yup
    })
    .required()
 
+type SignInFormData = yup.InferType<typeof signInValidationSchema>
+
 export function SignIn() {
    const { colors } = useTheme()
 
@@ -37,11 +26,11 @@ export function SignIn() {
       control,
       handleSubmit,
       formState: { errors }
-   } = useForm({
-      resolver: yupResolver(schema)
+   } = useForm<SignInFormData>({
+      resolver: yupResolver(signInValidationSchema)
    })
 
-   const onSubmit = (data: FormData) => console.log(data)
+   const onSubmit = (data: SignInFormData) => console.log(data)
 
    return (
       <VStack flex={1} alignItems="center" bg="gray.600" px={8} pt={24}>
@@ -52,33 +41,25 @@ export function SignIn() {
          </Heading>
 
          <Input
+            name="email"
+            control={control}
+            error={errors.email?.message}
             placeholder="E-mail"
             InputLeftElement={
                <Icon as={<Envelope color={colors.gray[300]} />} ml={4} />
             }
-            control={control}
-            name="email"
          />
-         {errors.email && (
-            <Text mt={1} color="red.500">
-               {errors.email.message}
-            </Text>
-         )}
 
          <Input
+            name="password"
+            control={control}
+            error={errors.password?.message}
             placeholder="Senha"
             InputLeftElement={
                <Icon as={<Key color={colors.gray[300]} />} ml={4} />
             }
             secureTextEntry
-            control={control}
-            name="password"
          />
-         {errors.password && (
-            <Text mt={1} color="red.500">
-               {errors.password.message}
-            </Text>
-         )}
 
          <Button title="Entrar" w="full" onPress={handleSubmit(onSubmit)} />
       </VStack>
