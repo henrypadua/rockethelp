@@ -7,7 +7,9 @@
          "@components/*": ["./src/components/*"],
          "@screens/*": ["./src/screens/*"],
          "@assets/*": ["./src/assets/*"],
-         "@hooks/*": ["./src/hooks/*"]
+         "@hooks/*": ["./src/hooks/*"],
+         "@DTOs/*": ["./src/DTOs/*"],
+         "@utils/*": ["./src/utils/*"]
       }
    }
 }

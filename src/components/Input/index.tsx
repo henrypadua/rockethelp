@@ -2,13 +2,16 @@ import {
    Input as NativeBaseInput,
    IInputProps,
    VStack,
-   Text
+   Text,
+   HStack,
+   useTheme
 } from 'native-base'
+import { WarningCircle } from 'phosphor-react-native'
 import { Controller, Control, FieldValues, Path } from 'react-hook-form'
 
 interface InputProps<T extends FieldValues = FieldValues> extends IInputProps {
    name: Path<T>
-   control: Control<T>
+   control?: Control<T>
    error?: string
 }
 
@@ -18,6 +21,7 @@ export function Input<T extends FieldValues = FieldValues>({
    error,
    ...rest
 }: InputProps<T>) {
+   const { colors } = useTheme()
    return (
       <VStack>
          <Controller
@@ -33,6 +37,7 @@ export function Input<T extends FieldValues = FieldValues>({
                   size="md"
                   borderWidth={0}
                   fontSize="md"
+                  w="full"
                   fontFamily="body"
                   color="white"
                   placeholderTextColor="gray.300"
@@ -46,9 +51,11 @@ export function Input<T extends FieldValues = FieldValues>({
             )}
          />
          {!!error && (
-            <Text color="red.500" mt={1}>
-               {error}
-            </Text>
+            <HStack mt={1} alignItems="center" space={2}>
+               <WarningCircle size={14} color={colors.red[500]} />
+
+               <Text color="red.500">{error}</Text>
+            </HStack>
          )}
       </VStack>
    )
